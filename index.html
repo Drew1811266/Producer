@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      :root {
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+          sans-serif;
+        background: #f3f5f7;
+        color: #1b1f26;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        background: #f3f5f7;
+      }
+
+      #boot-fallback {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #f3f5f7;
+        color: #1b1f26;
+      }
+
+      body[data-app-mounted='true'] #boot-fallback {
+        display: none;
+      }
+
+      .boot-fallback-panel {
+        width: min(100%, 560px);
+        padding: 24px;
+        border: 1px solid rgba(17, 19, 24, 0.08);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 18px 40px rgba(17, 19, 24, 0.08);
+      }
+
+      .boot-fallback-eyebrow {
+        margin: 0 0 8px;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        color: rgba(112, 120, 135, 0.96);
+      }
+
+      .boot-fallback-title {
+        margin: 0;
+        font-size: 32px;
+        line-height: 1;
+      }
+
+      .boot-fallback-body,
+      .boot-fallback-error {
+        margin: 12px 0 0;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .boot-fallback-error {
+        white-space: pre-wrap;
+        color: #bf5c63;
+      }
+    </style>
+    <script type="module">
+      import { installBootFallback } from '/src/boot/runtime.ts';
+
+      installBootFallback();
+    </script>
+    <title>Producer</title>
+  </head>
+  <body>
+    <div id="boot-fallback">
+      <section class="boot-fallback-panel" role="status" aria-live="polite">
+        <p class="boot-fallback-eyebrow">Producer</p>
+        <h1 class="boot-fallback-title">正在启动…</h1>
+        <p class="boot-fallback-body">如果界面没有继续加载，这里会显示具体错误。</p>
+        <p id="boot-fallback-error" class="boot-fallback-error"></p>
+      </section>
+    </div>
+    <div id="root"></div>
+    <script type="module">
+      import('/src/main.tsx').catch((error) => {
+        const message =
+          error instanceof Error ? error.stack || error.message : String(error);
+        window.__PRODUCER_RENDER_BOOT_ERROR__?.(`主入口加载失败：${message}`);
+      });
+    </script>
+  </body>
+</html>
