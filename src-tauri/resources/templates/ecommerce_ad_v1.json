@@ -1,0 +1,41 @@
+{
+  "id": "ecommerce_ad_v1",
+  "version": 1,
+  "name": "Ecommerce Ad V1",
+  "description": "Three-layer local-first workspace for briefing, storyboards, and shot labs.",
+  "recommended": true,
+  "layer_specs": [
+    {
+      "layer_type": "brief",
+      "display_name": "Brief Canvas",
+      "allowed_node_types": ["brief"],
+      "child_canvas_for": "brief",
+      "default_relations": ["contains", "references"]
+    },
+    {
+      "layer_type": "storyboard",
+      "display_name": "Storyboard Canvas",
+      "allowed_node_types": ["storyboard_shot"],
+      "system_anchor": {
+        "title": "Brief Anchor",
+        "source_node_type": "brief"
+      },
+      "child_canvas_for": "storyboard_shot",
+      "default_relations": ["contains", "references", "approved_from"]
+    },
+    {
+      "layer_type": "shot_lab",
+      "display_name": "Shot Lab Canvas",
+      "allowed_node_types": ["prompt", "still", "video", "reference", "review", "result"],
+      "system_anchor": {
+        "title": "Storyboard Anchor",
+        "source_node_type": "storyboard_shot"
+      },
+      "default_relations": ["references", "variant_of", "alternative_to", "approved_from", "reuses"]
+    }
+  ],
+  "root_graph_seed": {
+    "layer_type": "brief",
+    "graph_name": "Brief Canvas"
+  }
+}
